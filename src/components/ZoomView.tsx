@@ -5,7 +5,7 @@ import { latLonToVector3 } from '../utils/hexagonUtils';
 import HexagonContent from './HexagonContent';
 
 interface ZoomViewProps {
-  selectedHexagon: { lat: number; lon: number; type: 'green' | 'white' | 'sand'; color: string } | null;
+  selectedHexagon: { lat: number; lon: number; type: 'green' | 'white' | 'sand' | 'beach' | 'water'; color: string } | null;
   onClose: () => void;
 }
 

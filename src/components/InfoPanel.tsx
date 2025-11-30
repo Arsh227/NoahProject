@@ -4,7 +4,7 @@ interface InfoPanelProps {
   hexagonData: {
     lat: number;
     lon: number;
-    type: 'green' | 'white' | 'sand';
+    type: 'green' | 'white' | 'sand' | 'beach' | 'water';
     color: string;
   } | null;
   onClose: () => void;
@@ -32,6 +32,18 @@ export default function InfoPanel({ hexagonData, onClose }: InfoPanelProps) {
           title: 'Desert',
           icon: '🏜️',
           description: 'Arid desert landscape with unique desert ecosystems',
+        };
+      case 'beach':
+        return {
+          title: 'Beach',
+          icon: '🏖️',
+          description: 'Beautiful sandy beach with coastal scenery',
+        };
+      case 'water':
+        return {
+          title: 'Coastal Waters',
+          icon: '🌊',
+          description: 'Shallow coastal waters and ocean areas',
         };
     }
   };

@@ -6,7 +6,7 @@ import { latLonToVector3 } from '../utils/hexagonUtils';
 interface EarthProps {
   autoRotate?: boolean;
   rotationSpeed?: number;
-  onHexagonClick?: (data: { lat: number; lon: number; type: 'green' | 'white' | 'sand'; color: string }) => void;
+  onHexagonClick?: (data: { lat: number; lon: number; type: 'green' | 'white' | 'sand' | 'beach' | 'water'; color: string }) => void;
 }
 
 // Create hexagon shape for cartoon continents
@@ -118,6 +118,46 @@ export default function Earth({ autoRotate = true, rotationSpeed = 0.8, onHexago
   // Cartoon-style continents as hexagons with non-intersecting positions
   const continents = useMemo(() => {
     const allContinents = [
+      // Beach hexagons - yellow color (#FFFF00 = pure yellow) - placed FIRST to avoid filtering
+      // North American beaches - isolated coastal areas
+      { lat: 42, lon: -70, size: 0.15, color: '#FFFF00' }, // New England beach
+      { lat: 38, lon: -77, size: 0.14, color: '#FFFF00' }, // Mid-Atlantic beach
+      { lat: 32, lon: -80, size: 0.15, color: '#FFFF00' }, // South Carolina beach
+      { lat: 28, lon: -82, size: 0.14, color: '#FFFF00' }, // Florida Gulf beach
+      { lat: 26, lon: -81, size: 0.14, color: '#FFFF00' }, // Florida Atlantic beach
+      { lat: 34, lon: -119, size: 0.15, color: '#FFFF00' }, // California beach
+      { lat: 33, lon: -117, size: 0.14, color: '#FFFF00' }, // Southern California beach
+      // Caribbean beaches - isolated islands
+      { lat: 22, lon: -80, size: 0.15, color: '#FFFF00' }, // Cuba beach
+      { lat: 18, lon: -77, size: 0.14, color: '#FFFF00' }, // Jamaica beach
+      { lat: 12, lon: -70, size: 0.15, color: '#FFFF00' }, // Caribbean island beach
+      // European beaches - coastal areas
+      { lat: 51, lon: 1, size: 0.14, color: '#FFFF00' }, // UK beach
+      { lat: 47, lon: -2, size: 0.14, color: '#FFFF00' }, // French beach
+      { lat: 41, lon: 2, size: 0.15, color: '#FFFF00' }, // Spanish beach
+      { lat: 37, lon: -8, size: 0.14, color: '#FFFF00' }, // Portuguese beach
+      // Mediterranean beaches
+      { lat: 41, lon: 12, size: 0.15, color: '#FFFF00' }, // Italian beach
+      { lat: 39, lon: 22, size: 0.14, color: '#FFFF00' }, // Greek beach
+      { lat: 36, lon: 28, size: 0.14, color: '#FFFF00' }, // Greek island beach
+      // African beaches - coastal areas
+      { lat: 14, lon: 18, size: 0.14, color: '#FFFF00' }, // West African beach
+      { lat: 6, lon: 3, size: 0.15, color: '#FFFF00' }, // West African beach
+      { lat: -4, lon: 15, size: 0.14, color: '#FFFF00' }, // Central African beach
+      // Asian beaches - coastal areas
+      { lat: 26, lon: 119, size: 0.15, color: '#FFFF00' }, // Chinese beach
+      { lat: 21, lon: 113, size: 0.14, color: '#FFFF00' }, // Chinese beach
+      { lat: 13, lon: 100, size: 0.15, color: '#FFFF00' }, // Thai beach
+      { lat: 1, lon: 104, size: 0.14, color: '#FFFF00' }, // Singapore beach
+      // Australian/Pacific beaches
+      { lat: -27, lon: 153, size: 0.15, color: '#FFFF00' }, // Australian beach
+      { lat: -16, lon: 145, size: 0.14, color: '#FFFF00' }, // Australian beach
+      { lat: -12, lon: 130, size: 0.15, color: '#FFFF00' }, // Australian beach
+      // South American beaches - coastal areas
+      { lat: -3, lon: -38, size: 0.14, color: '#FFFF00' }, // Brazilian beach
+      { lat: -8, lon: -35, size: 0.15, color: '#FFFF00' }, // Brazilian beach
+      { lat: -12, lon: -77, size: 0.14, color: '#FFFF00' }, // Peruvian beach
+      { lat: -33, lon: -71, size: 0.14, color: '#FFFF00' }, // Chilean beach
       // North America - many hexagons
       { lat: 55, lon: -110, size: 0.18, color: '#66BB6A' },
       { lat: 50, lon: -100, size: 0.20, color: '#66BB6A' },
@@ -353,6 +393,152 @@ export default function Earth({ autoRotate = true, rotationSpeed = 0.8, onHexago
       { lat: 15, lon: -55, size: 0.11, color: '#B0E0E6' }, // Atlantic islands
       { lat: 50, lon: -20, size: 0.12, color: '#87CEEB' }, // Atlantic
       { lat: 45, lon: -15, size: 0.11, color: '#B0E0E6' }, // Atlantic
+      // More light blue hexagons - additional coastal and shallow water areas
+      // North American coastal waters
+      { lat: 40, lon: -72, size: 0.13, color: '#87CEEB' }, // New York area
+      { lat: 36, lon: -76, size: 0.13, color: '#B0E0E6' }, // Virginia coast
+      { lat: 32, lon: -79, size: 0.13, color: '#87CEEB' }, // South Carolina coast
+      { lat: 29, lon: -81, size: 0.13, color: '#B0E0E6' }, // Florida coast
+      { lat: 27, lon: -82, size: 0.12, color: '#87CEEB' }, // Florida coast
+      { lat: 36, lon: -122, size: 0.13, color: '#87CEEB' }, // San Francisco Bay
+      { lat: 32, lon: -117, size: 0.13, color: '#B0E0E6' }, // San Diego area
+      // More Caribbean and Central American waters
+      { lat: 24, lon: -82, size: 0.13, color: '#87CEEB' }, // Florida Keys
+      { lat: 19, lon: -81, size: 0.13, color: '#B0E0E6' }, // Cayman Islands
+      { lat: 17, lon: -88, size: 0.12, color: '#87CEEB' }, // Belize coast
+      { lat: 11, lon: -85, size: 0.13, color: '#B0E0E6' }, // Central America coast
+      { lat: 9, lon: -80, size: 0.12, color: '#87CEEB' }, // Panama coast
+      // More South American coastal waters
+      { lat: -2, lon: -45, size: 0.13, color: '#87CEEB' }, // Brazilian coast
+      { lat: -6, lon: -35, size: 0.13, color: '#B0E0E6' }, // Brazilian coast
+      { lat: -10, lon: -38, size: 0.12, color: '#87CEEB' }, // Brazilian coast
+      { lat: -14, lon: -42, size: 0.12, color: '#B0E0E6' }, // Brazilian coast
+      { lat: -23, lon: -45, size: 0.13, color: '#87CEEB' }, // Brazilian coast
+      // More European coastal waters
+      { lat: 52, lon: 4, size: 0.13, color: '#87CEEB' }, // Netherlands coast
+      { lat: 54, lon: 8, size: 0.13, color: '#B0E0E6' }, // German coast
+      { lat: 56, lon: 10, size: 0.12, color: '#87CEEB' }, // Danish coast
+      { lat: 59, lon: 10, size: 0.13, color: '#B0E0E6' }, // Norwegian coast
+      { lat: 43, lon: 5, size: 0.13, color: '#87CEEB' }, // French Riviera
+      { lat: 41, lon: 2, size: 0.13, color: '#B0E0E6' }, // Barcelona area
+      { lat: 38, lon: -9, size: 0.13, color: '#87CEEB' }, // Lisbon area
+      // More Mediterranean waters
+      { lat: 44, lon: 8, size: 0.13, color: '#87CEEB' }, // Italian Riviera
+      { lat: 40, lon: 14, size: 0.13, color: '#B0E0E6' }, // Naples area
+      { lat: 38, lon: 15, size: 0.12, color: '#87CEEB' }, // Sicily area
+      { lat: 37, lon: 23, size: 0.13, color: '#B0E0E6' }, // Greek coast
+      { lat: 35, lon: 24, size: 0.13, color: '#87CEEB' }, // Crete area
+      // More African coastal waters
+      { lat: 12, lon: 3, size: 0.13, color: '#87CEEB' }, // West African coast
+      { lat: 5, lon: 4, size: 0.13, color: '#B0E0E6' }, // West African coast
+      { lat: -2, lon: 10, size: 0.13, color: '#87CEEB' }, // Central African coast
+      { lat: -6, lon: 12, size: 0.12, color: '#B0E0E6' }, // Central African coast
+      { lat: -26, lon: 28, size: 0.13, color: '#87CEEB' }, // South African coast
+      { lat: -34, lon: 18, size: 0.13, color: '#B0E0E6' }, // Cape Town area
+      // More Middle East/Indian Ocean waters
+      { lat: 25, lon: 54, size: 0.13, color: '#87CEEB' }, // UAE coast
+      { lat: 24, lon: 54, size: 0.13, color: '#B0E0E6' }, // UAE coast
+      { lat: 19, lon: 72, size: 0.13, color: '#87CEEB' }, // Mumbai area
+      { lat: 13, lon: 80, size: 0.13, color: '#B0E0E6' }, // Chennai area
+      { lat: 6, lon: 80, size: 0.13, color: '#87CEEB' }, // Sri Lanka
+      // More Asian coastal waters
+      { lat: 31, lon: 121, size: 0.14, color: '#87CEEB' }, // Shanghai area
+      { lat: 35, lon: 129, size: 0.13, color: '#B0E0E6' }, // Busan area
+      { lat: 35, lon: 139, size: 0.14, color: '#87CEEB' }, // Tokyo Bay
+      { lat: 14, lon: 121, size: 0.13, color: '#87CEEB' }, // Manila Bay
+      { lat: 1, lon: 104, size: 0.13, color: '#B0E0E6' }, // Singapore area
+      // More Australian/Pacific waters
+      { lat: -19, lon: 147, size: 0.13, color: '#87CEEB' }, // Australian coast
+      { lat: -23, lon: 151, size: 0.13, color: '#B0E0E6' }, // Australian coast
+      { lat: -28, lon: 153, size: 0.13, color: '#87CEEB' }, // Brisbane area
+      { lat: -34, lon: 151, size: 0.13, color: '#B0E0E6' }, // Sydney area
+      { lat: -38, lon: 145, size: 0.13, color: '#87CEEB' }, // Melbourne area
+      { lat: -17, lon: 178, size: 0.13, color: '#87CEEB' }, // Fiji area
+      { lat: -21, lon: -159, size: 0.13, color: '#B0E0E6' }, // Hawaii area
+      // More Atlantic waters
+      { lat: 25, lon: -77, size: 0.13, color: '#87CEEB' }, // Bahamas
+      { lat: 18, lon: -66, size: 0.13, color: '#B0E0E6' }, // Puerto Rico
+      { lat: 12, lon: -69, size: 0.13, color: '#87CEEB' }, // Aruba area
+      { lat: 55, lon: -3, size: 0.13, color: '#87CEEB' }, // UK coast
+      { lat: 53, lon: -3, size: 0.13, color: '#B0E0E6' }, // UK coast
+      { lat: 48, lon: -4, size: 0.13, color: '#87CEEB' }, // French coast
+      // Even more light blue hexagons - additional coastal areas
+      // North American Great Lakes and inland waters
+      { lat: 45, lon: -83, size: 0.13, color: '#87CEEB' }, // Lake Huron area
+      { lat: 43, lon: -79, size: 0.13, color: '#B0E0E6' }, // Lake Ontario area
+      { lat: 42, lon: -87, size: 0.13, color: '#87CEEB' }, // Lake Michigan area
+      // More East Coast waters
+      { lat: 44, lon: -66, size: 0.13, color: '#87CEEB' }, // Maine coast
+      { lat: 41, lon: -71, size: 0.13, color: '#B0E0E6' }, // Cape Cod area
+      { lat: 39, lon: -74, size: 0.13, color: '#87CEEB' }, // New Jersey coast
+      // More Gulf of Mexico
+      { lat: 30, lon: -87, size: 0.13, color: '#87CEEB' }, // Alabama coast
+      { lat: 29, lon: -95, size: 0.13, color: '#B0E0E6' }, // Texas coast
+      { lat: 27, lon: -97, size: 0.13, color: '#87CEEB' }, // Texas coast
+      // More Pacific Coast
+      { lat: 48, lon: -123, size: 0.13, color: '#87CEEB' }, // Washington coast
+      { lat: 46, lon: -124, size: 0.13, color: '#B0E0E6' }, // Oregon coast
+      { lat: 37, lon: -122, size: 0.13, color: '#87CEEB' }, // San Francisco area
+      // More Caribbean
+      { lat: 16, lon: -88, size: 0.13, color: '#87CEEB' }, // Belize barrier reef
+      { lat: 10, lon: -84, size: 0.13, color: '#B0E0E6' }, // Costa Rica coast
+      { lat: 8, lon: -80, size: 0.13, color: '#87CEEB' }, // Panama coast
+      // More South American waters
+      { lat: -12, lon: -77, size: 0.13, color: '#87CEEB' }, // Lima area
+      { lat: -16, lon: -72, size: 0.13, color: '#B0E0E6' }, // Peruvian coast
+      { lat: -33, lon: -71, size: 0.13, color: '#87CEEB' }, // Valparaiso area
+      { lat: -36, lon: -73, size: 0.13, color: '#B0E0E6' }, // Chilean coast
+      // More European waters
+      { lat: 60, lon: 5, size: 0.13, color: '#87CEEB' }, // Norwegian coast
+      { lat: 58, lon: 6, size: 0.13, color: '#B0E0E6' }, // Norwegian coast
+      { lat: 55, lon: 12, size: 0.13, color: '#87CEEB' }, // Danish coast
+      { lat: 57, lon: 11, size: 0.13, color: '#B0E0E6' }, // Swedish coast
+      { lat: 60, lon: 25, size: 0.13, color: '#87CEEB' }, // Finnish coast
+      { lat: 42, lon: 3, size: 0.13, color: '#87CEEB' }, // Balearic Sea
+      { lat: 39, lon: 3, size: 0.13, color: '#B0E0E6' }, // Balearic Sea
+      // More Mediterranean
+      { lat: 36, lon: 5, size: 0.13, color: '#87CEEB' }, // Algerian coast
+      { lat: 33, lon: 10, size: 0.13, color: '#B0E0E6' }, // Tunisian coast
+      { lat: 32, lon: 34, size: 0.13, color: '#87CEEB' }, // Israeli coast
+      { lat: 35, lon: 33, size: 0.13, color: '#B0E0E6' }, // Lebanese coast
+      // More African waters
+      { lat: 15, lon: 38, size: 0.13, color: '#87CEEB' }, // Red Sea
+      { lat: 22, lon: 39, size: 0.13, color: '#B0E0E6' }, // Red Sea
+      { lat: -4, lon: 39, size: 0.13, color: '#87CEEB' }, // Kenyan coast
+      { lat: -6, lon: 39, size: 0.13, color: '#B0E0E6' }, // Tanzanian coast
+      { lat: -26, lon: 32, size: 0.13, color: '#87CEEB' }, // Mozambique coast
+      // More Middle East waters
+      { lat: 26, lon: 50, size: 0.13, color: '#87CEEB' }, // Bahrain area
+      { lat: 25, lon: 51, size: 0.13, color: '#B0E0E6' }, // Qatar area
+      { lat: 24, lon: 54, size: 0.13, color: '#87CEEB' }, // UAE coast
+      // More Indian Ocean
+      { lat: 4, lon: 73, size: 0.13, color: '#87CEEB' }, // Maldives
+      { lat: -4, lon: 55, size: 0.13, color: '#B0E0E6' }, // Seychelles
+      { lat: -20, lon: 57, size: 0.13, color: '#87CEEB' }, // Mauritius
+      // More Asian waters
+      { lat: 22, lon: 114, size: 0.13, color: '#87CEEB' }, // Hong Kong area
+      { lat: 22, lon: 120, size: 0.13, color: '#B0E0E6' }, // Taiwan area
+      { lat: 25, lon: 121, size: 0.13, color: '#87CEEB' }, // Taiwan coast
+      { lat: 13, lon: 100, size: 0.13, color: '#87CEEB' }, // Bangkok area
+      { lat: 10, lon: 106, size: 0.13, color: '#B0E0E6' }, // Ho Chi Minh area
+      { lat: 3, lon: 101, size: 0.13, color: '#87CEEB' }, // Kuala Lumpur area
+      // More Indonesian/Philippine waters
+      { lat: -6, lon: 106, size: 0.13, color: '#87CEEB' }, // Jakarta area
+      { lat: -8, lon: 115, size: 0.13, color: '#B0E0E6' }, // Bali area
+      { lat: 5, lon: 119, size: 0.13, color: '#87CEEB' }, // Philippines
+      { lat: 14, lon: 121, size: 0.13, color: '#B0E0E6' }, // Manila area
+      // More Pacific waters
+      { lat: 21, lon: -157, size: 0.13, color: '#87CEEB' }, // Hawaii
+      { lat: 13, lon: 144, size: 0.13, color: '#87CEEB' }, // Guam
+      { lat: 7, lon: 134, size: 0.13, color: '#B0E0E6' }, // Palau
+      // More Australian waters
+      { lat: -12, lon: 130, size: 0.13, color: '#87CEEB' }, // Darwin area
+      { lat: -32, lon: 115, size: 0.13, color: '#B0E0E6' }, // Perth area
+      { lat: -31, lon: 115, size: 0.13, color: '#87CEEB' }, // Perth coast
+      // More Atlantic islands
+      { lat: 28, lon: -16, size: 0.13, color: '#87CEEB' }, // Canary Islands
+      { lat: 32, lon: -16, size: 0.13, color: '#B0E0E6' }, // Madeira
+      { lat: 38, lon: -28, size: 0.13, color: '#87CEEB' }, // Azores
     ];
 
     // Filter out overlapping hexagons (very relaxed to allow more hexagons)
@@ -374,7 +560,8 @@ export default function Earth({ autoRotate = true, rotationSpeed = 0.8, onHexago
     }
 
     // Log for debugging
-    console.log(`Total continents: ${allContinents.length}, Filtered: ${filteredContinents.length}`);
+    const beachCount = filteredContinents.filter(c => c.color.includes('FFFF00')).length;
+    console.log(`Total continents: ${allContinents.length}, Filtered: ${filteredContinents.length}, Beach hexagons: ${beachCount}`);
     
     return filteredContinents;
   }, []);
@@ -449,12 +636,13 @@ export default function Earth({ autoRotate = true, rotationSpeed = 0.8, onHexago
                          continent.color.includes('4CAF50') || continent.color.includes('388E3C') ||
                          continent.color.includes('9CCC65') || continent.color.includes('AED581') ||
                          continent.color.includes('8BC34A') || continent.color.includes('A5D6A7');
+          const isBeach = continent.color.includes('FFFF00'); // Beach color (pure yellow)
+          const isWater = continent.color.includes('87CEEB') || continent.color.includes('B0E0E6'); // Light blue = water
           const isSand = continent.color.includes('F4A460') || continent.color.includes('DEB887') || 
                         continent.color.includes('D2B48C');
-          const isLightBlue = continent.color.includes('87CEEB') || continent.color.includes('B0E0E6');
           
-          // Light blue hexagons show as sand (coastal/beach areas)
-          const hexagonType = isGreen ? 'green' : (isSand || isLightBlue) ? 'sand' : 'white';
+          // Determine hexagon type: beach has priority, then green, then water, then sand, then white
+          const hexagonType = isBeach ? 'beach' : isGreen ? 'green' : isWater ? 'water' : isSand ? 'sand' : 'white';
           
           return (
             <CartoonContinent

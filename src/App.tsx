@@ -10,7 +10,7 @@ import './styles/App.css';
 interface SelectedHexagon {
   lat: number;
   lon: number;
-  type: 'green' | 'white' | 'sand';
+  type: 'green' | 'white' | 'sand' | 'beach' | 'water';
   color: string;
 }
 

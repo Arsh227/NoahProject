@@ -1,12 +1,14 @@
 import { useRef } from 'react';
 import { useFrame, useLoader, useThree } from '@react-three/fiber';
-import { Group, TextureLoader, Vector3 } from 'three';
+import { Group, TextureLoader } from 'three';
 import camelTextureImage from '../photos/go0f_svsw_210525.jpg';
 import snowTextureImage from '../photos/e59r_kvdn_230223.jpg';
 import treeTextureImage from '../photos/bhys_zrk0_210722.jpg';
+import beachTextureImage from '../photos/1_ifd-iA39ykXjgeP_IdtcaQ.jpg';
+import waterTextureImage from '../photos/Tiger-7--2013_reduced.jpg';
 
 interface HexagonContentProps {
-  hexagonType: 'green' | 'white' | 'sand';
+  hexagonType: 'green' | 'white' | 'sand' | 'beach' | 'water';
   lat: number;
   lon: number;
 }
@@ -110,6 +112,72 @@ function DesertAnimal({ position }: { position: [number, number, number] }) {
   );
 }
 
+// Beach - simple photo display
+function Beach({ position }: { position: [number, number, number] }) {
+  const meshRef = useRef<Group>(null);
+  const beachTexture = useLoader(TextureLoader, beachTextureImage);
+  const { camera } = useThree();
+  
+  // Make the image always face the camera (billboard effect)
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.lookAt(camera.position);
+    }
+  });
+
+  // Calculate aspect ratio from texture
+  const aspectRatio = beachTexture.image ? beachTexture.image.width / beachTexture.image.height : 1;
+  const width = 0.25; // Same size as other photos
+  const height = width / aspectRatio;
+
+  return (
+    <group ref={meshRef} position={position}>
+      {/* Photo plane - displays the beach image, always facing camera */}
+      <mesh position={[0, 0, 0.15]}>
+        <planeGeometry args={[width, height]} />
+        <meshBasicMaterial 
+          map={beachTexture} 
+          transparent={false}
+          side={2} // DoubleSide so it's visible from both sides
+        />
+      </mesh>
+    </group>
+  );
+}
+
+// Water (light blue hexagons) - simple photo display
+function Water({ position }: { position: [number, number, number] }) {
+  const meshRef = useRef<Group>(null);
+  const waterTexture = useLoader(TextureLoader, waterTextureImage);
+  const { camera } = useThree();
+  
+  // Make the image always face the camera (billboard effect)
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.lookAt(camera.position);
+    }
+  });
+
+  // Calculate aspect ratio from texture
+  const aspectRatio = waterTexture.image ? waterTexture.image.width / waterTexture.image.height : 1;
+  const width = 0.25; // Same size as other photos
+  const height = width / aspectRatio;
+
+  return (
+    <group ref={meshRef} position={position}>
+      {/* Photo plane - displays the water image, always facing camera */}
+      <mesh position={[0, 0, 0.15]}>
+        <planeGeometry args={[width, height]} />
+        <meshBasicMaterial 
+          map={waterTexture} 
+          transparent={false}
+          side={2} // DoubleSide so it's visible from both sides
+        />
+      </mesh>
+    </group>
+  );
+}
+
 export default function HexagonContent({ hexagonType }: HexagonContentProps) {
   const groupRef = useRef<Group>(null);
   const animalPosition = [0, 0.2, 0] as [number, number, number];
@@ -131,6 +199,12 @@ export default function HexagonContent({ hexagonType }: HexagonContentProps) {
       )}
       {hexagonType === 'sand' && (
         <DesertAnimal position={animalPosition} />
+      )}
+      {hexagonType === 'beach' && (
+        <Beach position={animalPosition} />
+      )}
+      {hexagonType === 'water' && (
+        <Water position={animalPosition} />
       )}
     </group>
   );
