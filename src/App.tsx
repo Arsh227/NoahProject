@@ -32,7 +32,7 @@ function Scene({
       <Earth autoRotate={true} rotationSpeed={5.0} onHexagonClick={onHexagonClick} />
 
       {/* Animated stars background */}
-      <Stars radius={300} depth={50} count={8000} factor={6} fade speed={2} />
+      <Stars radius={300} depth={50} count={8000} factor={18} fade speed={2} />
 
       {/* Camera Controls - disabled when zoomed in */}
       <OrbitControls

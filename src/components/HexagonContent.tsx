@@ -1,6 +1,9 @@
 import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Group } from 'three';
+import { useFrame, useLoader, useThree } from '@react-three/fiber';
+import { Group, TextureLoader, Vector3 } from 'three';
+import camelTextureImage from '../photos/go0f_svsw_210525.jpg';
+import snowTextureImage from '../photos/e59r_kvdn_230223.jpg';
+import treeTextureImage from '../photos/bhys_zrk0_210722.jpg';
 
 interface HexagonContentProps {
   hexagonType: 'green' | 'white' | 'sand';
@@ -8,93 +11,100 @@ interface HexagonContentProps {
   lon: number;
 }
 
-// Simple 3D Tree component
+// Tree - simple photo display
 function Tree({ position }: { position: [number, number, number] }) {
-  const groupRef = useRef<Group>(null);
+  const meshRef = useRef<Group>(null);
+  const treeTexture = useLoader(TextureLoader, treeTextureImage);
+  const { camera } = useThree();
   
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.getElapsedTime()) * 0.1;
+  // Make the image always face the camera (billboard effect)
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.lookAt(camera.position);
     }
   });
 
+  // Calculate aspect ratio from texture
+  const aspectRatio = treeTexture.image ? treeTexture.image.width / treeTexture.image.height : 1;
+  const width = 0.25; // Same size as camel and snow
+  const height = width / aspectRatio;
+
   return (
-    <group ref={groupRef} position={position}>
-      {/* Tree trunk */}
-      <mesh position={[0, 0.1, 0]}>
-        <cylinderGeometry args={[0.05, 0.05, 0.2, 8]} />
-        <meshStandardMaterial color="#8B4513" />
-      </mesh>
-      {/* Tree leaves */}
-      <mesh position={[0, 0.25, 0]}>
-        <coneGeometry args={[0.15, 0.3, 8]} />
-        <meshStandardMaterial color="#228B22" />
+    <group ref={meshRef} position={position}>
+      {/* Photo plane - displays the tree image, always facing camera */}
+      <mesh position={[0, 0, 0.15]}>
+        <planeGeometry args={[width, height]} />
+        <meshBasicMaterial 
+          map={treeTexture} 
+          transparent={false}
+          side={2} // DoubleSide so it's visible from both sides
+        />
       </mesh>
     </group>
   );
 }
 
-// Snow animal (polar bear)
+// Snow animal - simple photo display
 function SnowAnimal({ position }: { position: [number, number, number] }) {
-  const groupRef = useRef<Group>(null);
+  const meshRef = useRef<Group>(null);
+  const snowTexture = useLoader(TextureLoader, snowTextureImage);
+  const { camera } = useThree();
   
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 2) * 0.05;
+  // Make the image always face the camera (billboard effect)
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.lookAt(camera.position);
     }
   });
 
+  // Calculate aspect ratio from texture
+  const aspectRatio = snowTexture.image ? snowTexture.image.width / snowTexture.image.height : 1;
+  const width = 0.25; // Same size as camel
+  const height = width / aspectRatio;
+
   return (
-    <group ref={groupRef} position={position}>
-      {/* Polar bear body */}
-      <mesh position={[0, 0.1, 0]}>
-        <sphereGeometry args={[0.12, 16, 16]} />
-        <meshStandardMaterial color="#FFFFFF" />
-      </mesh>
-      {/* Head */}
-      <mesh position={[0, 0.2, 0.08]}>
-        <sphereGeometry args={[0.08, 16, 16]} />
-        <meshStandardMaterial color="#FFFFFF" />
-      </mesh>
-      {/* Ears */}
-      <mesh position={[-0.06, 0.25, 0.08]}>
-        <sphereGeometry args={[0.03, 8, 8]} />
-        <meshStandardMaterial color="#FFFFFF" />
-      </mesh>
-      <mesh position={[0.06, 0.25, 0.08]}>
-        <sphereGeometry args={[0.03, 8, 8]} />
-        <meshStandardMaterial color="#FFFFFF" />
+    <group ref={meshRef} position={position}>
+      {/* Photo plane - displays the snow image, always facing camera */}
+      <mesh position={[0, 0, 0.15]}>
+        <planeGeometry args={[width, height]} />
+        <meshBasicMaterial 
+          map={snowTexture} 
+          transparent={false}
+          side={2} // DoubleSide so it's visible from both sides
+        />
       </mesh>
     </group>
   );
 }
 
-// Desert animal (camel)
+// Desert animal (camel) - simple photo display
 function DesertAnimal({ position }: { position: [number, number, number] }) {
-  const groupRef = useRef<Group>(null);
+  const meshRef = useRef<Group>(null);
+  const camelTexture = useLoader(TextureLoader, camelTextureImage);
+  const { camera } = useThree();
   
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.2;
+  // Make the image always face the camera (billboard effect)
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.lookAt(camera.position);
     }
   });
 
+  // Calculate aspect ratio from texture
+  const aspectRatio = camelTexture.image ? camelTexture.image.width / camelTexture.image.height : 1;
+  const width = 0.25; // Smaller size
+  const height = width / aspectRatio;
+
   return (
-    <group ref={groupRef} position={position}>
-      {/* Camel body */}
-      <mesh position={[0, 0.1, 0]}>
-        <boxGeometry args={[0.2, 0.15, 0.25]} />
-        <meshStandardMaterial color="#D2691E" />
-      </mesh>
-      {/* Camel head */}
-      <mesh position={[0, 0.15, 0.15]}>
-        <boxGeometry args={[0.1, 0.1, 0.12]} />
-        <meshStandardMaterial color="#D2691E" />
-      </mesh>
-      {/* Hump */}
-      <mesh position={[0, 0.2, -0.05]}>
-        <sphereGeometry args={[0.08, 8, 8]} />
-        <meshStandardMaterial color="#CD853F" />
+    <group ref={meshRef} position={position}>
+      {/* Photo plane - displays the camel image, always facing camera */}
+      <mesh position={[0, 0, 0.15]}>
+        <planeGeometry args={[width, height]} />
+        <meshBasicMaterial 
+          map={camelTexture} 
+          transparent={false}
+          side={2} // DoubleSide so it's visible from both sides
+        />
       </mesh>
     </group>
   );
@@ -114,11 +124,7 @@ export default function HexagonContent({ hexagonType }: HexagonContentProps) {
   return (
     <group ref={groupRef}>
       {hexagonType === 'green' && (
-        <>
-          <Tree position={[-0.12, 0, -0.08]} />
-          <Tree position={[0.12, 0, -0.08]} />
-          <Tree position={[0, 0, 0.08]} />
-        </>
+        <Tree position={animalPosition} />
       )}
       {hexagonType === 'white' && (
         <SnowAnimal position={animalPosition} />
