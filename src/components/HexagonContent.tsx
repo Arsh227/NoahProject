@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Mesh, MeshStandardMaterial, Color, Group } from 'three';
+import { Group } from 'three';
 
 interface HexagonContentProps {
   hexagonType: 'green' | 'white' | 'sand';
@@ -100,7 +100,7 @@ function DesertAnimal({ position }: { position: [number, number, number] }) {
   );
 }
 
-export default function HexagonContent({ hexagonType, lat, lon }: HexagonContentProps) {
+export default function HexagonContent({ hexagonType }: HexagonContentProps) {
   const groupRef = useRef<Group>(null);
   const animalPosition = [0, 0.2, 0] as [number, number, number];
 

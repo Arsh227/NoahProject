@@ -1,6 +1,6 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Mesh, MeshStandardMaterial, Color, Vector3, Matrix4, Quaternion, Shape, ExtrudeGeometry, Group } from 'three';
+import { Mesh, Color, Vector3, Matrix4, Quaternion, Shape, ExtrudeGeometry, Group } from 'three';
 import { latLonToVector3 } from '../utils/hexagonUtils';
 
 interface EarthProps {
@@ -107,7 +107,7 @@ export default function Earth({ autoRotate = true, rotationSpeed = 0.8, onHexago
   const earthGroupRef = useRef<Group>(null);
   
   // Auto-rotate Earth sphere continuously (continents stay fixed)
-  useFrame((state, delta) => {
+  useFrame((_state, delta) => {
     if (earthGroupRef.current && autoRotate) {
       // Rotate Earth sphere group from west to east
       // Continents are outside this group so they stay fixed

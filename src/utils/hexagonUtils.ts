@@ -77,7 +77,7 @@ export function projectHexagonToSphere(
  * Generate hexagonal grid using icosahedral geodesic approach
  */
 export function generateHexagonGrid(
-  subdivisions: number = 20,
+  _subdivisions: number = 20,
   hexRadius: number = 0.05
 ): HexagonData[] {
   const hexagons: HexagonData[] = [];
@@ -132,7 +132,7 @@ export function generateHexagonGrid(
  * Improved hexagon grid using better geodesic distribution
  */
 export function generateGeodesicHexagonGrid(
-  resolution: number = 15,
+  _resolution: number = 15,
   hexRadius: number = 0.08
 ): HexagonData[] {
   const hexagons: HexagonData[] = [];

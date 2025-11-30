@@ -9,7 +9,7 @@ interface ZoomViewProps {
   onClose: () => void;
 }
 
-export default function ZoomView({ selectedHexagon, onClose }: ZoomViewProps) {
+export default function ZoomView({ selectedHexagon }: ZoomViewProps) {
   const { camera } = useThree();
   const targetPositionRef = useRef<Vector3>(new Vector3(0, 0, 3));
   const targetLookAtRef = useRef<Vector3>(new Vector3(0, 0, 0));
